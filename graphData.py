@@ -1,8 +1,6 @@
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
 import datetime as dt
-import time
 
 def findOccurences(s, ch):
     return [i for i, letter in enumerate(s) if letter == ch]
@@ -22,7 +20,12 @@ for item in data:
 
 ax=plt.gca()
 xfmt = md.DateFormatter('%H:%M:%S.%f')
+ax.set_color_cycle(['red', 'green', 'blue'])
 ax.xaxis.set_major_formatter(xfmt)
-print type(updateData['timestamp'][0])
 plt.plot(updateData['timestamp'],updateData['x'])
+plt.plot(updateData['timestamp'],updateData['y'])
+plt.plot(updateData['timestamp'],updateData['z'])
+
+plt.legend(['x', 'y', 'z'], loc='upper left')
+
 plt.show()
