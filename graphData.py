@@ -7,7 +7,7 @@ import matplotlib.transforms as mtransforms
 def findOccurences(s, ch):
     return [i for i, letter in enumerate(s) if letter == ch]
     
-with open("/Users/kat/Documents/XCODE/graphPython/datanewTimestamp.txt", "r") as f:
+with open("/Users/kat/Documents/XCODE/graphPython/dataMoving.txt", "r") as f:
     data = f.read()
 
 data = data.split('\n')
@@ -28,9 +28,9 @@ for i in range(0,len(updateData['x'])):
     updateData['y'][i] = float(updateData['y'][i])
     updateData['z'][i] = float(updateData['z'][i])
 
-for i in range(0,len(updateData['z'])):
-    if (abs(float(updateData['z'][i]) - float(updateData['z'][i-1])) < .02):
-        updateData['z'][i] = -1.0;
+#for i in range(0,len(updateData['z'])):
+#    if (abs(float(updateData['z'][i]) - float(updateData['z'][i-1])) < .02):
+#        updateData['z'][i] = -1.0;
 
 start = float(updateData['timestamp'][0])
 end = float(updateData['timestamp'][len(data)-1])
@@ -50,7 +50,15 @@ plt.plot(updateData['timestamp'],updateData['x'])
 plt.plot(updateData['timestamp'],updateData['y'])
 plt.plot(updateData['timestamp'],updateData['z'])
 
-with open("/Users/kat/Documents/XCODE/graphPython/touchNewTimestamp.txt", "r") as f:
+
+for i in range(1,len(updateData['x'])-1):
+    print updateData['z'][i] - updateData['z'][i-1]
+    print updateData['x'][i] - updateData['x'][i-1]    
+    if abs(updateData['z'][i] - updateData['z'][i-1]) >4.5 *abs(updateData['x'][i] - updateData['x'][i-1]):
+       ax.axvline(updateData['timestamp'][i], color = 'r', linestyle='-')
+
+
+with open("/Users/kat/Documents/XCODE/graphPython/touchMoving.txt", "r") as f:
     touchData = f.read()
 
 touchData = touchData.split('\n')
