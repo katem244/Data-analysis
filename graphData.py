@@ -7,7 +7,7 @@ import matplotlib.transforms as mtransforms
 def findOccurences(s, ch):
     return [i for i, letter in enumerate(s) if letter == ch]
     
-with open("/Users/kat/Documents/XCODE/graphPython/dataDavis.txt", "r") as f:
+with open("/Users/kat/Documents/XCODE/graphPython/dataOnTable.txt", "r") as f:
     data = f.read()
 
 data = data.split('\n')
@@ -54,7 +54,7 @@ interval = int(end - start)
 i = 0
 sec = updateData['timestamp'][0]
 
-with open("/Users/kat/Documents/XCODE/graphPython/touchDavis.txt", "r") as f:
+with open("/Users/kat/Documents/XCODE/graphPython/touchOnTable.txt", "r") as f:
     touchData = f.read()
 
 touchData = touchData.split('\n')
@@ -71,13 +71,14 @@ for item in range(0,interval/2):
         point =  np.interp(time, updateData['timestamp'], filteredZ)
         if point != 0:
             color += 1
-        #if abs(point) > 0.04:
-        #    color = -1
-        #    break
-        time += .01
-        
+        if abs(point) > 0.05:
+            color = -1
+            break
+        time += .002
+    
+    right = 0
+    wrong = 0
     if (color > 0):
-        right = 0;
         for touch in touchData:
             if (float(touch) > sec and float(touch ) < (sec + 2)):
                 right += 1
@@ -85,10 +86,17 @@ for item in range(0,interval/2):
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='green') 
         else:
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='red') 
-                
+    else:
+        for touch in touchData:
+            if (float(touch) > sec and float(touch ) < (sec + 2)):
+                wrong += 1
+        if wrong > 0:    
+            ax.axvspan(sec, sec + 2, alpha = 0.5, color='red') 
+        else:
+            ax.axvspan(sec, sec + 2, alpha = 0.5, color='green') 
+                                        
     i+=2
     sec += 2
-    #print "time is " + str(sec) + ", color is " + str(color) + ", 'time' is " + str(time)
     
 #plt.plot(updateData['timestamp'],filteredX)
 #plt.plot(updateData['timestamp'],filteredY)
