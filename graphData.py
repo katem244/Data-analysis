@@ -7,7 +7,7 @@ import matplotlib.transforms as mtransforms
 def findOccurences(s, ch):
     return [i for i, letter in enumerate(s) if letter == ch]
     
-with open("/Users/kat/Documents/XCODE/graphPython/dataOnTable.txt", "r") as f:
+with open("/Users/kat/Documents/XCODE/graphPython/checkFinal.txt", "r") as f:
     data = f.read()
 
 data = data.split('\n')
@@ -54,15 +54,14 @@ interval = int(end - start)
 i = 0
 sec = updateData['timestamp'][0]
 
-with open("/Users/kat/Documents/XCODE/graphPython/touchOnTable.txt", "r") as f:
+with open("/Users/kat/Desktop/touchData.txt", "r") as f:
     touchData = f.read()
 
-touchData = touchData.split('\n')
+touchData = touchData.split(' ')
 
-for item in touchData:   
-    ax.axvline(float(item), color = 'k', linestyle='--')
-
-for item in range(0,interval/2):
+for i in range (0,len(touchData)-1): 
+    ax.axvline(float(touchData[i]), color = 'k', linestyle='--')
+for item in range(0,interval/2 + 1):
     plt.axvline(x=sec, color='r', linestyle='-')
     time = sec
     color = 0
@@ -79,16 +78,16 @@ for item in range(0,interval/2):
     right = 0
     wrong = 0
     if (color > 0):
-        for touch in touchData:
-            if (float(touch) > sec and float(touch ) < (sec + 2)):
+        for x in range(0, len(touchData)-1):
+            if (float(touchData[x]) > sec and float(touchData[x] ) < (sec + 2)):
                 right += 1
         if right > 0:    
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='green') 
         else:
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='red') 
     else:
-        for touch in touchData:
-            if (float(touch) > sec and float(touch ) < (sec + 2)):
+        for x in range(0, len(touchData)-1):
+            if (float(touchData[x]) > sec and float(touchData[x]) < (sec + 2)):
                 wrong += 1
         if wrong > 0:    
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='red') 
