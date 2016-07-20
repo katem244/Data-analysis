@@ -42,14 +42,14 @@ def filtering(brokenData, alpha, filteredZ):
         #print filteredZ
         #print type(filteredZ[len(filteredZ)-1])
         filteredZ.append(alpha * (filteredZ[len(filteredZ)-1] + brokenData[i] - brokenData[i-1]))
-        if (abs(filteredZ[i] - filteredZ[i-1]) < .009):
-            filteredZ[i] = 0.0
+        if (abs(filteredZ[len(filteredZ)-1] - filteredZ[len(filteredZ)-2]) < .0004):
+            filteredZ[len(filteredZ)-1] = 0.0
     #print filteredZ
     #print len(filteredZ)
     return filteredZ
 
         
-with open("/Users/kat/Desktop/tableAndNot.txt", "r") as f:
+with open("/Users/kat/Desktop/newTouch4.txt", "r") as f:
     data = f.read()
     
 
@@ -74,7 +74,7 @@ start = float(updateData['timestamp'][0]); end = float(updateData['timestamp'][l
 
 i = 0; sec = updateData['timestamp'][0]
 
-with open("/Users/kat/Desktop/touchDataTableAndNot.txt", "r") as f:
+with open("/Users/kat/Desktop/touchDataNewTouch4.txt", "r") as f:
     touchData = f.read()
 
 touchData = touchData.split(' ')
@@ -106,19 +106,26 @@ filteredZ = []
 
 total = 0
 for n in range(0,len(brokenData)):
-    if n < len(brokenData)-1:
-        if abs(avgs[n] - avgs[n+1]) < 0.015: 
+    print avgs[n]
+    if n == 0:
+        if abs(avgs[n] - avgs[n+1]) < 0.02: 
             filteredZ = filtering(brokenData[n], 0.1, filteredZ)
             print "ey"
         else:
-            filteredZ = filtering(brokenData[n], 0.065, filteredZ)
-            print "eyyyyy"
-    
+            filteredZ = filtering(brokenData[n], 0.02, filteredZ)
+            print "eyyyyy"       
+    elif n < len(brokenData)-1:
+        if (avgs[n] < -0.9 and avgs[n] > -1.1) or abs(avgs[n] - avgs[n+1]) < 0.02 or abs(avgs[n] - avgs[n-1]) < 0.02: 
+            filteredZ = filtering(brokenData[n], 0.1, filteredZ)
+            print "ey"
+        else:
+            filteredZ = filtering(brokenData[n], 0.02, filteredZ)
+            print "eyyyyy"  
     else:
-        if abs(avgs[n] - avgs[n-1]) < 0.015: 
+        if abs(avgs[n] - avgs[n-1]) < 0.02: 
             filteredZ = filtering(brokenData[n], 0.1, filteredZ)
         else:
-            filteredZ = filtering(brokenData[n], 0.065, filteredZ)
+            filteredZ = filtering(brokenData[n], 0.02, filteredZ)
     for x in range(0, len(brokenData[n])):
         total += 1
     
@@ -134,7 +141,7 @@ for item in range(0,interval/2):
         point =  np.interp(time, newTime, filteredZ)
         if point != 0:
             color += 1
-        if abs(point) > 0.07:
+        if abs(point) > 0.0065:
             color = -1
             break
         time += .002
@@ -181,35 +188,36 @@ print "alldone"
 #                    
 #                            
 for x in range(0,len(avgs)-1):
-    #if x == 0:
-    analysis(0, touchData, secs[x], colors[x])  
-    #    if abs(avgs[x] - avgs[x+1]) < 0.015:
-    #        #print "heyy, old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
-    #        analysis(0, touchData, secs[x], colors[x])
-    #    else:
-    #        #print "old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
-    #        analysis(64, touchData, secs[x], colors[x])    
-    #elif x < len(avgs) - 1:
-    #    if abs(avgs[x] - avgs[x+1]) < 0.015 or abs(avgs[x-1] - avgs[x]) < 0.015:
-    #        #print "heyyaaaaaaaaa, old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
-    #        analysis(0, touchData, secs[x], colors[x])
-    #        #print x
-    #    else:
-    #        #print "old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
-    #        analysis(64, touchData, secs[x], colors[x]) 
-    #else:
-    #    if abs(avgs[x] - avgs[x-1]) < 0.015:
-    #        #print "heyy, old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
-    #        analysis(0, touchData, secs[x], colors[x])
-    #    else:
-    #        #print "old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
-    #        analysis(64, touchData, secs[x], colors[x])
+    print colors[x]
+    if x == 0:
+    #analysis(0, touchData, secs[x], colors[x])  
+        if abs(avgs[x] - avgs[x+1]) < 0.015:
+            print "heyy1, old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
+            analysis(15, touchData, secs[x], colors[x])
+        else:
+            print "old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
+            analysis(50, touchData, secs[x], colors[x])    
+    elif x < len(avgs) - 1:
+        if abs(avgs[x] - avgs[x+1]) < 0.015 or abs(avgs[x-1] - avgs[x]) < 0.015:
+            print "heyyaaaaaaaaa, old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
+            analysis(15, touchData, secs[x], colors[x])
+            #print x
+        else:
+            print "heyaaaaaaaa2 old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
+            analysis(50, touchData, secs[x], colors[x]) 
+    else:
+        if abs(avgs[x] - avgs[x-1]) < 0.015:
+            print "heyy, old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
+            analysis(15, touchData, secs[x], colors[x])
+        else:
+            print "heyy2, old av: " + str(avgs[x]) + ", new av: " + str(avgs[x+1])
+            analysis(50, touchData, secs[x], colors[x])
                 
 
 
 
 plt.plot(newTime, filteredZ)
-##plt.plot(updateData['timestamp'],updateData['z'])
+#plt.plot(updateData['timestamp'],updateData['z'])
 #
 #      
 #plt.legend(['z', 'touch event'], loc='upper left')
