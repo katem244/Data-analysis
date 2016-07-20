@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
-#import datetime as dt
 import numpy as np
 import matplotlib.transforms as mtransforms
 
@@ -22,9 +21,8 @@ ax = plt.gca()
 ax.set_color_cycle(['purple','black'])
 
 
-for i in range(0,len(updateData['x'])):
+for i in range(0,len(updateData['z'])):
     updateData['z'][i] = float(updateData['z'][i])
-
 
 filteredZ = [None]*len(updateData['z'])
 filteredZ[0] = 0.0
