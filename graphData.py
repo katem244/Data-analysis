@@ -116,13 +116,13 @@ interval = int(end - start)
 avgs = []; secs = []; colors = []; brokenUpData={}; newTime = [];
 sec = updateData['timestamp'][0]
 
-legend2 = False
+legendSec = True
 for item in range(0,interval/2 + 1):
     brokenUpData[item] = []       
-    if legend2:
+    if legendSec:
         # Only want value on legend to appear once
         plt.axvline(x=sec, color='r', linestyle='-', label = 'Two second mark')
-        legend2 = False
+        legendSec = False
     else:
         plt.axvline(x=sec, color='r', linestyle='-')
     
