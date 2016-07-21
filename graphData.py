@@ -24,11 +24,13 @@ def filtering(brokenUpData, alpha, filteredZ):
 # touchData is a list of all timestamps of touch events.
 # sec is the timestamp beginning the given 2 second interval
 # color is the number of times a spike was recognized from the filteredData
+# legend1 and legend2 are booleans that will be used in order for value to only
+# appear on the legend once
 def analysis(num, touchData, sec, color, legend1, legend2):
-    print legend1, legend2
 
     # Initialize right and wrong variables to false
     right = False; wrong = False
+    
     # Number of spikes has to pass a minumum number, specified by user
     if (color > num):
         for x in range(0, len(touchData)-1):
@@ -36,46 +38,39 @@ def analysis(num, touchData, sec, color, legend1, legend2):
             if (float(touchData[x]) > sec and float(touchData[x] ) < (sec + 2)):
                 # Change the value right to true
                 right = True
+        
         if right and legend1: 
             # Detected touch + actual touch (true positive)
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='green', label = 'True positive/negative')
             legend1 = False
-            print "green + touch1"
         elif right:
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='green')
-            print "green + touch2"
         elif legend2:
             # Detected touch + no touch (false positive)
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='red', label = 'False positive/negative')
             legend2 = False 
-            print "red + no touch1"
         else: 
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='red') 
-            print "red + no touch2"
     else:
         for x in range(0, len(touchData)-1):
             # If there was an touch event in that time interval ...
             if (float(touchData[x]) > sec and float(touchData[x]) < (sec + 2)):
                 # Change the value wrong to true
                 wrong = True
+        
         if wrong and legend2:
             # Did not detect touch + actual touch (false negative)    
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='red', label = 'False positive/negative') 
             legend2 = False
-            print "red + touch1"
         elif wrong:
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='red') 
-            print "red + touch2"
 
         elif legend1:
+            # Did not detect touch + no touch (true negative)            
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='green', label = 'True positive/negative') 
             legend1 = False
-            print "green + no touch1"
-
         else:
-            # Did not detect touch + no touch (true negative)
             ax.axvspan(sec, sec + 2, alpha = 0.5, color='green') 
-            print "green + no touch2"
 
     return legend1, legend2
 
